@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="si">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mr Pabasara Malinda AI — Dashboard</title>
+<style>
+:root{color-scheme:dark;--bg:#080d16;--panel:#111b2b;--line:#26364c;--cyan:#55d9e8;--muted:#9aabc0}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#142b40 0,transparent 35%),var(--bg);color:#edf5ff;font:15px system-ui,sans-serif}.wrap{max-width:1050px;margin:auto;padding:28px 18px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:22px;font-weight:750}.muted{color:var(--muted)}.pill{border:1px solid var(--line);border-radius:99px;padding:7px 12px;color:var(--cyan);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:22px 0}.card{background:linear-gradient(145deg,#142236,#0d1522);border:1px solid var(--line);border-radius:17px;padding:18px}.card h2{font-size:16px;margin:0 0 12px}.status{font-size:13px;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#77869a;margin-right:8px}.dot.ok{background:#38d99a}.chat{display:flex;flex-direction:column;gap:12px}.messages{height:260px;overflow:auto;background:#09111d;border:1px solid var(--line);border-radius:12px;padding:12px}.msg{white-space:pre-wrap;margin:8px 0;padding:10px 12px;border-radius:12px;max-width:90%;background:#17263a}.msg.user{margin-left:auto;background:#123a48}.send{display:flex;gap:8px}input,button{font:inherit;border-radius:10px;padding:12px;border:1px solid var(--line)}input{background:#09111d;color:white;min-width:0;flex:1}button{background:var(--cyan);color:#031018;font-weight:700;cursor:pointer}button:disabled{opacity:.5}.note{font-size:12px;color:var(--muted);line-height:1.6}a{color:var(--cyan)}
+</style>
+</head>
+<body><main class="wrap">
+<header class="top"><div><div class="brand">✦ Mr Pabasara Malinda AI</div><div class="muted">Personal AI control panel</div></div><span class="pill" id="overall">Checking services…</span></header>
+<section class="grid">
+<div class="card"><h2>AI Brain</h2><div class="status" id="ai"><i class="dot"></i>Checking…</div></div>
+<div class="card"><h2>WhatsApp</h2><div class="status" id="whatsapp"><i class="dot"></i>Checking…</div></div>
+<div class="card"><h2>Gmail</h2><div class="status" id="gmail"><i class="dot"></i>Checking…</div></div>
+<div class="card"><h2>Google Calendar</h2><div class="status" id="google_calendar"><i class="dot"></i>Checking…</div></div>
+<div class="card"><h2>GitHub</h2><div class="status" id="github"><i class="dot"></i>Checking…</div></div>
+<div class="card"><h2>Security</h2><div class="status">External actions are not executed without a separate approval and connected action service.</div></div>
+</section>
+<section class="card chat"><h2>Talk to your AI</h2><div class="messages" id="messages" aria-live="polite"><div class="msg">ආයුබෝවන්! මම Mr Pabasara Malinda AI. සිංහලෙන් හෝ English වලින් අහන්න.</div></div><form class="send" id="form"><input id="prompt" maxlength="3000" placeholder="ඔයාගේ පණිවිඩය ලියන්න…" autocomplete="off" required><button id="send">Send</button></form><div class="note">මෙම Chat එක AI_API_KEY සකසා තිබේ නම් පමණක් ක්‍රියා කරයි. මෙම Dashboard එක තවම Login ආරක්ෂාවකින් සීමා කර නැති නිසා පොදු හෝ රහස්‍ය තොරතුරු ඇතුළත් නොකරන්න.</div></section>
+<p class="note">Integrations වල “configured” තත්ත්වය OAuth ගිණුම සාර්ථකව සම්බන්ධ වූ බව අදහස් නොවේ. ගිණුම් සම්බන්ධ කිරීමට OAuth callback, token storage සහ අවසර පරීක්ෂණ තව අවශ්‍යයි.</p>
+</main>
+<script>
+const setStatus=(id,ok,yes,no)=>{const el=document.getElementById(id);el.innerHTML='<i class="dot '+(ok?'ok':'')+'"></i>'+ (ok?yes:no)};
+async function load(){try{const h=await fetch('/api/health').then(r=>r.json());setStatus('ai',!!h.aiConfigured,'Configured','API key not configured');setStatus('whatsapp',!!h.whatsappConfigured,'Credentials configured','Not configured');document.getElementById('overall').textContent=h.status==='online'?'API online':'API status unknown'}catch{document.getElementById('overall').textContent='API unavailable'}try{const d=await fetch('/api/integrations').then(r=>r.json());for(const id of ['gmail','google_calendar','github']){const item=d.integrations?.find(x=>x.id===id);setStatus(id,!!item?.configured,item?.status==='configured'?'Configured':'Credentials present — OAuth pending','Not connected')}}catch{for(const id of ['gmail','google_calendar','github'])setStatus(id,false,'Configured','Status unavailable')}}
+const form=document.getElementById('form'),input=document.getElementById('prompt'),messages=document.getElementById('messages'),send=document.getElementById('send');
+function bubble(text,who){const el=document.createElement('div');el.className='msg '+who;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight}
+form.addEventListener('submit',async e=>{e.preventDefault();const text=input.value.trim();if(!text)return;bubble(text,'user');input.value='';send.disabled=true;try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:text}]})});const d=await r.json();bubble(r.ok?(d.reply||'No reply received.'):(d.error||'AI service unavailable.'),'');}catch{bubble('Could not reach the AI service.','')}finally{send.disabled=false;input.focus()}});
+load();
+</script></body></html>
