@@ -15,12 +15,6 @@
   force = true
 
 [[redirects]]
-  from = "/api/telegram"
-  to = "/.netlify/functions/telegram"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/api/whatsapp"
   to = "/.netlify/functions/whatsapp"
   status = 200
