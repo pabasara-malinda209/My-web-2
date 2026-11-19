@@ -1,13 +1,13 @@
 # Mr Pabasara Malinda AI — Setup
 
-මෙම project එකේ code එක GitHub එකේ `ai-assistant-foundation` branch එකට දමා ඇත. මුල් website එකත් backup repository එකේ `main` branch එකත් වෙනස් නොවේ.
+මෙම project එකේ code එක GitHub හි `ai-assistant-foundation` branch එකේ ඇත. මුල් website එක සහ backup repository එකේ `main` branch එක වෙනස් නොකරයි.
 
 ## මේ අදියරේ ඇතුළත් දේ
-- Website chat එකට පොදු Sinhala/English AI brain එක.
-- Telegram webhook handler.
-- WhatsApp Cloud API webhook handler සහ signature verification.
-- Gmail, Google Calendar, GitHub, Slack, Outlook සඳහා integration status endpoint.
+- Website chat එකට Sinhala/English AI brain එක.
+- WhatsApp Cloud API webhook සහ signature verification.
+- Gmail, Google Calendar, GitHub, Slack, Outlook සඳහා integration configuration status endpoint.
 - අවදානම් සහිත වැඩ execute නොකර approval අවශ්‍යදැයි පරීක්ෂා කරන endpoint.
+- Dashboard එකෙන් AI සහ service configuration තත්ත්වය බැලීම.
 
 ## Netlify Environment Variables
 
@@ -18,40 +18,34 @@ Netlify → Site configuration → Environment variables තුළ පහත val
 - `AI_BASE_URL` — optional; default OpenAI API base URL
 - `AI_MODEL` — optional; default `gpt-4o-mini`
 
-### Telegram
-- `TELEGRAM_BOT_TOKEN`
-- `TELEGRAM_WEBHOOK_SECRET` — optional but recommended
-
-Telegram webhook URL: `https://YOUR-SITE.netlify.app/api/telegram`
-Set the webhook using Telegram Bot API `setWebhook`, including `secret_token` matching `TELEGRAM_WEBHOOK_SECRET`.
-
 ### WhatsApp Cloud API
-- `WHATSAPP_VERIFY_TOKEN` — choose a long random value
-- `WHATSAPP_APP_SECRET` — Meta app secret (used to verify webhook signatures)
+- `WHATSAPP_VERIFY_TOKEN` — ඔබම තෝරාගන්නා දිගු random value එකක්
+- `WHATSAPP_APP_SECRET` — Meta app secret (webhook signature verify කිරීමට)
 - `WHATSAPP_ACCESS_TOKEN`
 - `WHATSAPP_PHONE_NUMBER_ID`
-- `META_GRAPH_API_VERSION` — optional; choose a currently supported Meta Graph API version
+- `META_GRAPH_API_VERSION` — optional; Meta සහාය දක්වන Graph API version එක
 
 Webhook URL: `https://YOUR-SITE.netlify.app/api/whatsapp`
-In Meta Developers, configure the callback URL and the same verify token, subscribe to the `messages` webhook field, and add the app secret and access token as Netlify environment variables.
 
-### Other integrations
+Meta Developers තුළ callback URL සහ එකම verify token එක සකසා `messages` webhook field එක subscribe කරන්න. App secret සහ access token Netlify environment variables ලෙස පමණක් දමන්න.
+
+### වෙනත් integrations
 - Google OAuth: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
 - GitHub OAuth: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`
 - Slack OAuth: `SLACK_CLIENT_ID`, `SLACK_CLIENT_SECRET`
 - Microsoft OAuth: `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`
 
-The status endpoint only reports whether OAuth credentials are present. Full OAuth consent, token storage/refresh, and Gmail/Calendar/GitHub action adapters still need to be implemented before those services can be used. Do not treat a configured client ID as a connected account.
+Integration status endpoint එක දැනට credentials තිබේද යන්න පමණක් පෙන්වයි. OAuth consent, ආරක්ෂිත token storage/refresh, සහ Gmail/Calendar/GitHub ක්‍රියාකාරකම් තවම සම්පූර්ණ කර නැත. Client ID එකක් තිබීමෙන් account එක සම්බන්ධ වූ බවක් අදහස් නොවේ.
 
 ## API endpoints
-- `POST /api/chat` — website chat
-- `POST /api/telegram` — Telegram webhook
-- `GET|POST /api/whatsapp` — WhatsApp verification and webhook
+- `POST /api/chat` — website AI chat
+- `GET|POST /api/whatsapp` — WhatsApp verification සහ webhook
 - `GET /api/integrations` — integration configuration status
-- `POST /api/approvals` — risk classification only; never executes actions
+- `POST /api/approvals` — risk classification පමණි; කිසිදු external action එකක් execute නොකරයි
+- `GET /api/health` — AI සහ WhatsApp configuration status
 
 ## Security notes
-- Never commit secrets, access tokens, or `.env` files.
-- Use HTTPS and verify webhook signatures/secrets.
-- External actions are not implemented by the approval endpoint. A real action executor must check an explicit, authenticated user approval immediately before execution.
-- Add durable storage, per-user identity, rate limiting, and audit logs before production use.
+- Secrets, access tokens, හෝ `.env` files GitHub වෙත commit නොකරන්න.
+- HTTPS භාවිතා කර webhook signatures verify කරන්න.
+- Approval endpoint එක external actions execute නොකරයි. සැබෑ action executor එකක් සෑදීමට පෙර authenticated user identity, explicit approval, durable storage, rate limiting, සහ audit logs අවශ්‍යයි.
+- Dashboard එකට login protection තවම නැත. එය ආරක්ෂිත authentication එකක් එකතු කරන තුරු private හෝ sensitive data සඳහා භාවිතා නොකරන්න.
