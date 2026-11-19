@@ -12,7 +12,7 @@ Do not request passwords or API keys in chat. Tell the user to configure credent
 export async function askAssistant(messages) {
   const apiKey = process.env.AI_API_KEY;
   if (!apiKey) throw new Error("AI_API_KEY is not configured.");
-  const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\\/+$/, "");
+  const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const model = process.env.AI_MODEL || "gpt-4o-mini";
   const safeMessages = (Array.isArray(messages) ? messages : [])
     .filter((m) => m && ["user", "assistant"].includes(m.role) && typeof m.content === "string")
