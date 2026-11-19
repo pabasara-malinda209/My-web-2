@@ -5,13 +5,13 @@ import { Bot, Send, Sparkles, X } from "lucide-react";
 const GREETING = {
   role: "assistant",
   content:
-    "Hi! I am Pabasara's AI assistant. Ask me about his skills, his projects, or how to get in touch.",
+    "ආයුබෝවන්! මම Mr Pabasara Malinda AI. මට සිංහලෙන් හෝ English වලින් ඕනෑම ප්‍රශ්නයක් අහන්න.",
 };
 
 const SUGGESTIONS = [
-  "What does Pabasara build?",
-  "Which skills does he have?",
-  "How can I contact him?",
+  "මට උදව් කරන්න",
+  "What can you do?",
+  "Help me plan my day",
 ];
 
 const FALLBACK_ERROR =
@@ -90,7 +90,7 @@ export const ChatWidget = () => {
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--cyan)]">
                   AI Assistant
                 </p>
-                <p className="text-xs text-zinc-400">Ask about Pabasara</p>
+                <p className="text-xs text-zinc-400">Your personal AI assistant</p>
               </div>
             </div>
 
@@ -140,7 +140,7 @@ export const ChatWidget = () => {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question..."
+                placeholder="Message Mr Pabasara Malinda AI..."
                 className="min-w-0 flex-1 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-[var(--cyan)]/50"
               />
               <button
