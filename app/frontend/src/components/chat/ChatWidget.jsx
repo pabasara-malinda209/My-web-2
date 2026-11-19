@@ -66,7 +66,7 @@ export const ChatWidget = () => {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close chat" : "Open AI chat"}
         data-testid="chat-toggle"
-        className="fixed bottom-5 right-5 z-[90] grid h-14 w-14 place-items-center rounded-full border border-[var(--cyan)]/40 bg-[#07090e]/90 text-[var(--cyan)] shadow-xl backdrop-blur-xl transition-transform duration-300 hover:scale-105"
+        className="fixed bottom-5 left-5 z-[90] grid h-14 w-14 place-items-center rounded-full border border-[var(--cyan)]/40 bg-[#07090e]/90 text-[var(--cyan)] shadow-xl backdrop-blur-xl transition-transform duration-300 hover:scale-105"
       >
         {open ? <X size={20} /> : <Bot size={22} />}
       </motion.button>
@@ -80,7 +80,7 @@ export const ChatWidget = () => {
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             data-testid="chat-panel"
-            className="fixed bottom-24 right-5 z-[90] flex h-[26rem] w-[22rem] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#07090e]/95 shadow-2xl backdrop-blur-xl"
+            className="fixed bottom-24 left-5 z-[90] flex h-[26rem] w-[22rem] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#07090e]/95 shadow-2xl backdrop-blur-xl"
           >
             <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
               <span className="grid h-8 w-8 place-items-center rounded-full border border-[var(--cyan)]/40 text-[var(--cyan)]">
