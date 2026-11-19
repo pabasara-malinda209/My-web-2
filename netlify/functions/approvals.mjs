@@ -1,6 +1,7 @@
 const sensitivePatterns = [
-  /\\b(send|email|message|publish|post|delete|remove|buy|purchase|pay|transfer|refund|invite|share)\\b/i,
-  /\\b(gmail|whatsapp|telegram|calendar|github)\\b.*\\b(send|delete|publish|create|update)\\b/i,
+  /\b(send|email|message|publish|post|delete|remove|buy|purchase|pay|transfer|refund|invite|share)\b/i,
+  /\b(gmail|whatsapp|telegram|calendar|github)\b.*\b(send|delete|publish|create|update)\b/i,
+  /(යවන්න|මකන්න|ගෙවන්න|මුදල් මාරු කරන්න|පළ කරන්න|බෙදාගන්න|ආරාධනා කරන්න)/i,
 ];
 export default async (event) => {
   if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method not allowed." };
